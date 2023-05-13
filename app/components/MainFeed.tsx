@@ -2,6 +2,7 @@
 import { ProfileId, useFeed } from '@lens-protocol/react-web';
 import { formatPicture } from '../../utils';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const Feed = () => {
     const {
@@ -28,7 +29,7 @@ const Feed = () => {
                     key={post.root.id}
                     className="bg-black/75 border border-white rounded-xl shadow-md overflow-hidden p-2"
                 >
-                    <div className="p-4 flex items-center">
+                    <Link href={`/profile/${post.root.profile.handle}`} className="p-4 flex items-center w-auto">
                         <Image
                             width="200"
                             height="200"
@@ -44,9 +45,9 @@ const Feed = () => {
                                 @{post.root.profile.handle}
                             </div>
                         </div>
-                    </div>
+                    </Link>
                     <div className="px-4 pb-4">
-                        <div className="text-sm ">{post.root.metadata.content}</div>
+                        <div className="text-sm whitespace-pre-wrap"><pre>{post.root.metadata.content}</pre></div>
                         {post.root.metadata.media.map((media, index) => (
                             <div key={index} className="mt-2">
                                 <video
