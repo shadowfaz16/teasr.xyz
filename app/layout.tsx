@@ -28,7 +28,7 @@ const livepeerClient = createReactClient({
 
 const lensConfig: LensConfig = {
   bindings: wagmiBindings(),
-  environment: development,
+  environment: production,
   appId: appId('teasr-app')
 };
 

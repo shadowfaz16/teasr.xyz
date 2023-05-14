@@ -9,6 +9,7 @@ import Image from 'next/image';
 import ProfileScore from '../components/ProfileScore';
 import { AiOutlineSync } from 'react-icons/ai';
 import { useState } from 'react';
+import ProfileFeed from '../components/ProfileFeed';
 
 const ProfilePage = () => {
     const { data, error, loading } = useActiveProfile();
@@ -88,10 +89,6 @@ const ProfilePage = () => {
                             </div>
                         </div>
                         <div className="mt-5">
-                            <p className="font-medium text-gray-400">Dispatcher Address:</p>
-                            <p className="mt-2 text-sm text-gray-500">{data?.dispatcher?.address as string}</p>
-                        </div>
-                        <div className="mt-5">
                             <p className="font-medium text-gray-400">On-Chain Identity:</p>
                             <p className="mt-2 text-sm text-gray-500">{data?.onChainIdentity?.ens?.name as string}</p>
                             <p className="mt-2 text-sm text-gray-500">Proof of Humanity: {data.onChainIdentity.proofOfHumanity ? 'Yes' : 'No'}</p>
@@ -99,6 +96,7 @@ const ProfilePage = () => {
                         </div>
                     </div>
                 </div>
+                <ProfileFeed />
             </div>
         </>
     )

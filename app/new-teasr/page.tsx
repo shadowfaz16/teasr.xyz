@@ -33,8 +33,6 @@ const NewTeasr = () => {
     const { data: user, loading } = useActiveProfile();
     console.log('user:' ,user)
 
-    
-    
     const {
         mutate: createAsset,
         data: asset,
@@ -50,7 +48,7 @@ const NewTeasr = () => {
     );
     const { data: metrics } = useAssetMetrics({
         assetId: asset?.[0].id,
-        refetchInterval: 30000,
+        // refetchInterval: 30000,
     });
 
     const onDrop = useCallback(async (acceptedFiles: File[]) => {
@@ -95,8 +93,6 @@ const NewTeasr = () => {
         setCategory("");
         setSensitiveInfo("");
     }
-
-
 
     return (
         <div className=''>
@@ -237,7 +233,7 @@ function Compose ({ publisher }) {
     const onSubmit = async () => {
       await create({
         content: "My first video",
-        contentFocus: ContentFocus.TEXT,
+        contentFocus: ContentFocus.VIDEO,
         locale: 'en',
         collect: {
             type: CollectPolicyType.FREE,
