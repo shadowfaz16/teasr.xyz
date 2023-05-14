@@ -23,7 +23,7 @@ const ProfilePage = () => {
 
     const { name, handle, bio, picture, stats, attributes, interests } = data;
 
-    return (
+    return ( 
         <>
             <Navbar />
             <div className="bg-black min-h-screen flex flex-col items-center justify-center py-5 px-4">

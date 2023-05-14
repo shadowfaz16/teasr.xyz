@@ -18,7 +18,7 @@ const client = create({
 })
 
 
-const Compose = ( {publisher} ) => {
+export function Compose( {publisher} : {publisher: any} ) {
     async function upload(postData) {
         const added = await client.add(JSON.stringify(postData))
         const uri = `ipfs://${added.path}`
@@ -68,5 +68,3 @@ const Compose = ( {publisher} ) => {
         </div>
     );
 }
-
-export default Compose;

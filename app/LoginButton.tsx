@@ -41,13 +41,13 @@ const LoginButton = () => {
         return (
 
         <div className='flex items-center space-x-4'>
-                {/* <button disabled={isPending} onClick={logout} className='inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white bg-gradient-to-r from-teal-400 to-magenta-500 hover:from-magenta-500 hover:to-teal-400'>Log out</button> */}
+                <button disabled={isPending} onClick={logout} className='inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white bg-gradient-to-r from-teal-400 to-magenta-500 hover:from-magenta-500 hover:to-teal-400'>Log out</button>
                 <div className='flex items-center space-x-2 text-xs px-5 py-2.5 leading-none font-bold border rounded text-white border-white bg-gradient-to-r from-teal-400 to-magenta-500 hover:from-magenta-500 hover:to-teal-400 hover:cursor-pointer animate-gradient'>
                     <MdAddCircleOutline size={16} />
                     <Link href="/new-teasr" className='flex'>
                         NEW TEASR</Link>
                 </div>
-            <Link href={'/profile'}>
+            <Link href={`/profile/${data.handle}`}>
                 <Image
                 width={32}
                 height={32} 

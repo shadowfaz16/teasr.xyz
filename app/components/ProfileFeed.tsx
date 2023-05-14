@@ -1,21 +1,26 @@
 'use client'
-import { ProfileId, useActiveProfile, usePublications } from '@lens-protocol/react-web';
+import { ProfileId, useActiveProfile, useProfile, usePublications } from '@lens-protocol/react-web';
 import { formatPicture } from '../../utils';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Player } from '@livepeer/react';
-
+import { usePathname } from 'next/navigation';
+ 
 
 const ProfileFeed = () => {
-    const { data: user, loading: userLoading } = useActiveProfile();
-    console.log("user", user)
+
+    const pathName = usePathname()
+    const handle = pathName?.split('/')[2]
+
+    const { data: profile } = useProfile({ handle })
+
     let {
         data: publications,
         loading,
         hasMore,
         next,
     } = usePublications({
-        profileId: '0x01bce6' as ProfileId,
+        profileId: profile?.id as ProfileId,
         limit: 16,
         // metadataFilter: {
         //     restrictPublicationTagsTo: {
@@ -35,7 +40,7 @@ const ProfileFeed = () => {
     })
 
     return (
-        <div className="gap-4 mt-10 grid grid-cols-2">
+        <div className="gap-4 mt-10 grid md:grid-cols-2">
             {
                 publications?.map((pub: any, index: number) => (
                     <div key={index} className="bg-black border border-white rounded-xl px-6 py-4 mb-4 shadow-md">
@@ -47,12 +52,12 @@ const ProfileFeed = () => {
                                         width="200"
                                         height="200"
                                         className="w-12 h-12 rounded-full mr-4 ring-2 ring-teal-200"
-                                        src={formatPicture(user?.picture)}
-                                        alt={user?.handle as string}
+                                        src={formatPicture(profile?.picture)}
+                                        alt={profile?.handle as string}
                                     />
                                     <div className='mb-4'>
-                                        <p className="text-white text-sm">{user?.name}</p>
-                                        <p className="text-white text-sm">@{user?.handle}</p>
+                                        <p className="text-white text-sm">{profile?.name}</p>
+                                        <p className="text-white text-sm">@{profile?.handle}</p>
                                     </div>
                                     </div>
                                     <div>
@@ -62,9 +67,9 @@ const ProfileFeed = () => {
                                     </div>
                             </div>
                         }
-                        {
+                        {/* {
                             pub.metadata.mainContentFocus === "VIDEO" && <Player title={pub.metadata.content} playbackId={pub.metadata.description.replace('videoid_', '')} />
-                        }
+                        } */}
                         {
                             pub.metadata?.media[0]?.original && ['image/jpeg', 'image/png'].includes(pub.metadata?.media[0]?.original.mimeType) && (
                                 <Image

@@ -5,7 +5,7 @@ import { useDropzone } from 'react-dropzone';
 import Navbar from '../components/NavBar';
 import { FiUpload } from 'react-icons/fi';
 import { useActiveProfile} from '@lens-protocol/react-web';
-import Compose from '../components/Compose';
+import {Compose} from '../components/Compose';
 
 const NewTeasr = () => {
     const [title, setTitle] = useState("");
