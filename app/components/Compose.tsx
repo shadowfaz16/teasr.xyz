@@ -17,11 +17,8 @@ const client = create({
     }
 })
 
-interface Props {
-    publisher: ProfileOwnedByMe;
-}
 
-const Compose = ({ publisher }: Props) => {
+const Compose = ( publisher ) => {
     async function upload(postData: any) {
         const added = await client.add(JSON.stringify(postData))
         const uri = `ipfs://${added.path}`
