@@ -1,5 +1,5 @@
 'use client'
-import { Player, useAssetMetrics, useCreateAsset, useUpdateAsset } from '@livepeer/react';
+import { Player, useAssetMetrics, useCreateAsset } from '@livepeer/react';
 import { useCallback, useMemo, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import Navbar from '../components/NavBar';
@@ -220,7 +220,7 @@ const NewTeasr = () => {
     );
 };
 
-function Compose ({ publisher }) {
+const Compose = ({ publisher }) => {
     async function upload(postData:any) {
         const added = await client.add(JSON.stringify(postData))
         const uri = `ipfs://${added.path}`
@@ -243,9 +243,16 @@ function Compose ({ publisher }) {
                 description: "videoid_559dz7d9mjq27hwr",
                 attributes: [],
             }
-        }
+        },
       });
     };
+    if (isPending) {
+        return <p>Creating post...</p>;
+    }
+    if (error) {
+        console.log(error);
+        return <p>Error: {error.message}</p>;
+    }
     if (wallet) {
       console.log(wallet);
       return (
