@@ -1,11 +1,26 @@
 'use client'
-import { Player, useAssetMetrics, useCreateAsset } from '@livepeer/react';
+import { Player, useAssetMetrics, useCreateAsset, useUpdateAsset } from '@livepeer/react';
 import { useCallback, useMemo, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import Navbar from '../components/NavBar';
 import { FiUpload } from 'react-icons/fi';
-import { useActiveProfile} from '@lens-protocol/react-web';
-import {Compose} from '../components/Compose';
+import { create } from 'ipfs-http-client'
+
+import { useActiveProfile, useCreatePost, useActiveWallet, ContentFocus, CollectPolicyType } from '@lens-protocol/react-web';
+
+/* configure Infura auth settings */
+const projectId = "2PkzI0wyR3M08EkxAlr4jMXxDZ1"
+const projectSecret = "ee305476603c7936b7ec8bf995a55f59"
+const auth = 'Basic ' + Buffer.from(projectId + ':' + projectSecret).toString('base64')
+
+const client = create({
+    host: 'ipfs.infura.io',
+    port: 5001,
+    protocol: 'https',
+    headers: {
+        authorization: auth,
+    }
+})
 
 const NewTeasr = () => {
     const [title, setTitle] = useState("");
@@ -16,7 +31,9 @@ const NewTeasr = () => {
     const [video, setVideo] = useState<File | undefined>();
 
     const { data: user, loading } = useActiveProfile();
-    console.log('user:' ,user)
+    console.log('user:', user)
+
+
 
     const {
         mutate: createAsset,
@@ -33,7 +50,7 @@ const NewTeasr = () => {
     );
     const { data: metrics } = useAssetMetrics({
         assetId: asset?.[0].id,
-        // refetchInterval: 30000,
+        refetchInterval: 30000,
     });
 
     const onDrop = useCallback(async (acceptedFiles: File[]) => {
@@ -78,6 +95,8 @@ const NewTeasr = () => {
         setCategory("");
         setSensitiveInfo("");
     }
+
+
 
     return (
         <div className=''>
@@ -157,54 +176,96 @@ const NewTeasr = () => {
                     </form>
                 </div>
                 <div className="w-full md:w-1/2 p-4">
-                {!asset && (
-                    <div
-                        {...getRootProps()}
-                        className="flex flex-col items-center justify-center h-64 bg-black border-2 rounded-xl border-dashed border-magenta-500 hover:border-turquoise-500 transition-colors duration-300 hover:bg-gray-900 hover:cursor-pointer"
-                    >
-                        <input {...getInputProps()} />
-                            <FiUpload color='#FF00FF' size={40} />
-                        <p className="text-white text-lg">Drag and drop or browse files</p>
-                        {error?.message && <p className="text-yellow-500 mt-2">{error.message}</p>}
-                    </div>
-                )}
-
-                {asset?.[0]?.playbackId && (
-                    <Player title={asset[0].name} playbackId={asset[0].playbackId} />
-                )}
-
-                <div className="text-white pt-2">
-                    {metrics?.metrics?.[0] && (
-                        <p>Views: {metrics?.metrics?.[0]?.startViews}</p>
-                    )}
-                    {video ? <p>{video.name}</p> : <p>Select a video file to upload.</p>}
-                    <p>{asset?.[0].playbackId}</p>
-                    <p>{asset?.[0].storage?.ipfs?.cid}</p>
-                    {progressFormatted && <p>{progressFormatted}</p>}
-                    <div className='flex items-center space-x-2 mt-2'>
-                        <button onClick={resetForm} className="text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                            Reset
-                        </button>
-                    {!asset?.[0].id && (
-                        <button
-                            onClick={() => {
-                                createAsset?.();
-                            }}
-                            disabled={isLoading || !createAsset}
-                            className="px-4 py-2 bg-magenta-500 text-white hover:bg-turquoise-500 transition-colors duration-300 disabled:opacity-50 rounded-lg"
+                    {!asset && (
+                        <div
+                            {...getRootProps()}
+                            className="flex flex-col items-center justify-center h-64 bg-black border-2 rounded-xl border-dashed border-magenta-500 hover:border-turquoise-500 transition-colors duration-300 hover:bg-gray-900 hover:cursor-pointer"
                         >
-                            Upload
-                        </button>
+                            <input {...getInputProps()} />
+                            <FiUpload color='#FF00FF' size={40} />
+                            <p className="text-white text-lg">Drag and drop or browse files</p>
+                            {error?.message && <p className="text-yellow-500 mt-2">{error.message}</p>}
+                        </div>
                     )}
-                    </div>
-                    </div>
 
-                            <Compose publisher={user} />
+                    {asset?.[0]?.playbackId && (
+                        <Player title={asset[0].name} playbackId={asset[0].playbackId} />
+                    )}
 
+                    <div className="text-white pt-2">
+                        {metrics?.metrics?.[0] && (
+                            <p>Views: {metrics?.metrics?.[0]?.startViews}</p>
+                        )}
+                        {video ? <p>{video.name}</p> : <p>Select a video file to upload.</p>}
+                        <p>{asset?.[0].playbackId}</p>
+                        <p>{asset?.[0].storage?.ipfs?.cid}</p>
+                        {progressFormatted && <p>{progressFormatted}</p>}
+                        <div className='flex items-center space-x-2 mt-2'>
+                            <button onClick={resetForm} className="text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                                Reset
+                            </button>
+                            {!asset?.[0].id && (
+                                <button
+                                    onClick={() => {
+                                        createAsset?.();
+                                    }}
+                                    disabled={isLoading || !createAsset}
+                                    className="px-4 py-2 bg-magenta-500 text-white hover:bg-turquoise-500 transition-colors duration-300 disabled:opacity-50 rounded-lg"
+                                >
+                                    Upload
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                    <Compose publisher={user} />
                 </div>
             </div>
         </div>
     );
 };
+
+function Compose({ publisher }) {
+    async function upload(postData: any) {
+        const added = await client.add(JSON.stringify(postData))
+        const uri = `ipfs://${added.path}`
+        console.log('uri: ', uri)
+        return uri
+    };
+    const { execute: create, error, isPending } = useCreatePost({ publisher, upload });
+    const { data: wallet, loading: walletLoading } = useActiveWallet();
+
+    const onSubmit = async () => {
+        await create({
+            content: "My first video",
+            contentFocus: ContentFocus.TEXT,
+            locale: 'en',
+            collect: {
+                type: CollectPolicyType.FREE,
+                followersOnly: false,
+                metadata: {
+                    name: "livepeer-id",
+                    description: "videoid_559dz7d9mjq27hwr",
+                    attributes: [],
+                }
+            }
+        });
+    };
+    if (wallet) {
+        console.log(wallet);
+        return (
+            <div>
+                <p>You are logged-in with {wallet.address}</p>
+                <button onClick={onSubmit}>save</button>
+            </div>
+        );
+    }
+
+    return (
+        <div>
+            <h1>Homes</h1>
+            <p>You are logged-out</p>
+        </div>
+    );
+}
 
 export default NewTeasr;

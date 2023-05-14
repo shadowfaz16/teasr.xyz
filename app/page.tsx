@@ -26,9 +26,6 @@ export default function Home() {
           <SuggestedFollows />
         </div>
       </div>
-      <div className='flex md:hidden'>
-        <BottomNav />
-      </div>
     </>
   );
 }
