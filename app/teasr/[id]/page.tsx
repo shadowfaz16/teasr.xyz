@@ -1,9 +1,21 @@
-import React from 'react'
+'use client'
+import { PublicationId, usePublication } from '@lens-protocol/react-web';
 
-const page = () => {
+const Publication = () => {
+  const { data: publication, loading } = usePublication({
+    publicationId: '0x01a694-0x0d' as PublicationId,
+  });
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  console.log("publication", publication)
+
   return (
-    <div>page</div>
-  )
+    <div></div>
+  );
+
 }
 
-export default page
+export default Publication;

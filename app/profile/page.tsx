@@ -6,10 +6,13 @@ import { FiGlobe } from 'react-icons/fi';
 import { MdApps } from 'react-icons/md';
 import Navbar from '../components/NavBar';
 import Image from 'next/image';
-
+import ProfileScore from '../components/ProfileScore';
+import { AiOutlineSync } from 'react-icons/ai';
+import { useState } from 'react';
 
 const ProfilePage = () => {
     const { data, error, loading } = useActiveProfile();
+    const [refresh, setRefresh] = useState(0);
 
     if (loading) return <p>Loading...</p>
 
@@ -63,10 +66,17 @@ const ProfilePage = () => {
                                 <p>Teasrs</p>
                             </div>
                             <div>
-                                <p className="text-brightYellow text-lg font-semibold">.89</p>
+                                <ProfileScore profileId="0x01bce6" refresh={refresh} />
+                                <div className='flex items-center justify-center space-x-2'>
                                 <p>Reputation</p>
+                                    <div className='hover:cursor-pointer' onClick={() => setRefresh(refresh + 1)}>
+                                    <AiOutlineSync />
+                                </div>
+                                </div>
+
                             </div>
                         </div>
+                        <div>                        </div>
                         <div className="mt-5">
                             <p className="font-medium text-gray-400">Topics:</p>
                             <div className="mt-2 flex flex-wrap">

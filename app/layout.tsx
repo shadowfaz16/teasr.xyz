@@ -11,6 +11,8 @@ import {
   createReactClient,
   studioProvider,
 } from '@livepeer/react';
+import { ApolloProvider } from "@apollo/client";
+import apolloClient from "../apolloClient"; 
 
 const client = createClient({
   autoConnect: true,
@@ -35,14 +37,16 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <WagmiConfig client={client}>
-        <LensProvider config={lensConfig}>
-      <LivepeerConfig client={livepeerClient}>
-          <body>{children}</body>
-      </LivepeerConfig>
-        </LensProvider>
-      </WagmiConfig>
-    </html>
+    <ApolloProvider client={apolloClient}>
+      <html lang="en">
+        <WagmiConfig client={client}>
+          <LensProvider config={lensConfig}>
+            <LivepeerConfig client={livepeerClient}>
+              <body>{children}</body>
+            </LivepeerConfig>
+          </LensProvider>
+        </WagmiConfig>
+      </html>
+    </ApolloProvider>
   )
 }
