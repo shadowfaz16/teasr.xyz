@@ -1,6 +1,6 @@
 'use client'
 import React from 'react';
-import { useActiveWallet, useCreatePost, ContentFocus, CollectPolicyType, ProfileOwnedByMe } from '@lens-protocol/react-web';
+import { useActiveWallet, useCreatePost, ContentFocus, CollectPolicyType } from '@lens-protocol/react-web';
 import { create } from 'ipfs-http-client';
 
 /* configure Infura auth settings */
@@ -18,8 +18,8 @@ const client = create({
 })
 
 
-const Compose = ( publisher ) => {
-    async function upload(postData: any) {
+const Compose = ( {publisher} ) => {
+    async function upload(postData) {
         const added = await client.add(JSON.stringify(postData))
         const uri = `ipfs://${added.path}`
         console.log('uri: ', uri)
@@ -39,7 +39,7 @@ const Compose = ( publisher ) => {
                 metadata: {
                     name: "livepeer-id",
                     description: "videoid_559dz7d9mjq27hwr",
-                    attributes: [],
+                    attributes: []
                 }
             },
         });

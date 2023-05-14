@@ -198,11 +198,9 @@ const NewTeasr = () => {
                     )}
                     </div>
                     </div>
-                    {/* {
-                        user && (
+
                             <Compose publisher={user} />
-                        )
-                    } */}
+
                 </div>
             </div>
         </div>
