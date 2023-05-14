@@ -43,16 +43,21 @@ const LoggedOutFeed = () => {
                         </div>
                     </Link>
                     <div className="px-4 pb-4">
-                        <div className="text-sm whitespace-pre-wrap"><pre>{post.metadata?.content}</pre></div>
-                        {post.metadata?.media.map((media, index) => (
-                            <div key={index} className="mt-2">
-                                <video
-                                    className="w-full"
-                                    controls
-                                    src={media.original.url}
-                                ></video>
-                            </div>
-                        ))}
+                        {
+                            post.__typename === 'Post' && 
+                            <>
+                                <div className="text-sm whitespace-pre-wrap"><pre>{post.metadata?.content}</pre></div>
+                                {post.metadata?.media.map((media, index) => (
+                                    <div key={index} className="mt-2">
+                                        <video
+                                            className="w-full"
+                                            controls
+                                            src={media.original.url}
+                                        ></video>
+                                    </div>
+                                ))}
+                            </>
+}
                     </div>
                 </div>
             ))}
