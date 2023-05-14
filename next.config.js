@@ -15,6 +15,8 @@ const nextConfig = {
       "media3.giphy.com",
       "media1.giphy.com",
       "media4.giphy.com",
+      'cdn.stamp.fyi',
+      'test.com'
     ],
   },
 };

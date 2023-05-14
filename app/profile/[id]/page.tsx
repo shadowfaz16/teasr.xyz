@@ -7,6 +7,7 @@ import { useProfile, usePublications } from '@lens-protocol/react-web'
 import { formatPicture } from '../../../utils'
 import ABI from '../../../abi.json'
 import Navbar from '@/app/components/NavBar'
+import { Player, useAssetMetrics, useCreateAsset, useUpdateAsset } from '@livepeer/react';
 
 const CONTRACT_ADDRESS = '0xDb46d1Dc155634FbC732f92E853b10B288AD5a1d'
 
@@ -122,13 +123,16 @@ function Publications({ profile }: { profile: any }) {
             return publication
         }
     })
-
+    console.log('publications:, ', publications)
     return (
         <div className="mt-4 w-full">
             {
                 publications?.map((pub: any, index: number) => (
                     <div key={index} className="bg-gray-50 rounded-xl px-6 py-4 mb-4 shadow-md">
                         <p className="text-gray-600 mb-4">{pub.metadata.content}</p>
+                        {
+                           pub.metadata.description && <Player title={pub.metadata.content} playbackId={pub.metadata.description.replace('videoid_', '')} />
+                        }
                         {
                             pub.metadata?.media[0]?.original && ['image/jpeg', 'image/png'].includes(pub.metadata?.media[0]?.original.mimeType) && (
                                 <Image

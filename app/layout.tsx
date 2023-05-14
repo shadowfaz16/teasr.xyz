@@ -3,7 +3,7 @@ import './globals.css'
 import { configureChains, createClient, WagmiConfig } from 'wagmi'
 import { mainnet, polygon } from 'wagmi/chains'
 import { publicProvider } from 'wagmi/providers/public'
-import { LensProvider, LensConfig, production, useWalletLogin } from '@lens-protocol/react-web'
+import { LensProvider, LensConfig, development, production, useWalletLogin, appId } from '@lens-protocol/react-web'
 import { bindings as wagmiBindings } from '@lens-protocol/wagmi'
 const { provider, webSocketProvider } = configureChains([polygon, mainnet], [publicProvider()])
 import {
@@ -28,7 +28,8 @@ const livepeerClient = createReactClient({
 
 const lensConfig: LensConfig = {
   bindings: wagmiBindings(),
-  environment: production,
+  environment: development,
+  appId: appId('teasr-app')
 };
 
 export default function RootLayout({

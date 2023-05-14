@@ -11,13 +11,13 @@ const Feed = () => {
         hasMore,
         next,
     } = useFeed({
-        profileId: '0x01bce6' as ProfileId,
+        profileId: '0x80b0' as ProfileId,
         limit: 5,
-        metadataFilter: {
-            restrictPublicationTagsTo: {
-                oneOf: ['lens'],
-            },
-        },
+        // metadataFilter: {
+        //     restrictPublicationTagsTo: {
+        //         oneOf: ['teas'],
+        //     },
+        // },
     });
 
     console.log("feedItems", feedItems)
