@@ -85,8 +85,7 @@ export default function Profile() {
             <div className="bg-black min-h-screen flex flex-col items-center justify-center py-5 px-4">
                 <div className=" shadow overflow-hidden sm:rounded-lg max-w-5xl w-full">
                     <div className="px-4 py-5 sm:px-6 bg-magenta text-white flex flex-col items-center">
-                        {profile.picture && <Image width="200"
-                            height="200" className="h-24 w-24 rounded-full" src={formatPicture(profile.picture)} alt={profile.name as string} />}
+                        {profile.picture && <img className="h-28 w-28 rounded-full" src={formatPicture(profile.picture)} alt={profile.name as string} />}
                         <h2 className="mt-2 text-lg leading-6 font-medium">{profile.name}</h2>
                         <p className="mt-1 text-sm">@{handle}</p>
                     </div>

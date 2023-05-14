@@ -1,17 +1,18 @@
 'use client'
-import { ProfileId, useFeed } from '@lens-protocol/react-web';
+import { ProfileId, useFeed, useActiveProfile } from '@lens-protocol/react-web';
 import { formatPicture } from '../../utils';
 import Image from 'next/image';
 import Link from 'next/link';
 
 const Feed = () => {
+    const { data: profile } = useActiveProfile();
     const {
         data: feedItems,
         loading,
         hasMore,
         next,
     } = useFeed({
-        profileId: '0x80b0' as ProfileId,
+        profileId: profile?.id as ProfileId,
         limit: 5,
         // metadataFilter: {
         //     restrictPublicationTagsTo: {
@@ -21,6 +22,7 @@ const Feed = () => {
     });
 
     console.log("feedItems", feedItems)
+    console.log("profile333", profile?.id)
 
     return (
         <div className="space-y-4 mt-10">

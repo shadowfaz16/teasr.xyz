@@ -29,7 +29,8 @@ const livepeerClient = createReactClient({
 const lensConfig: LensConfig = {
   bindings: wagmiBindings(),
   environment: development,
-  appId: appId('teasr-app')
+  appId: appId('teasr-app'),
+  sources: [appId('teasr-app')],
 };
 
 export default function RootLayout({

@@ -24,7 +24,7 @@ const ProfileFeed = () => {
         limit: 16,
         // metadataFilter: {
         //     restrictPublicationTagsTo: {
-        //         oneOf: ['teas'],
+        //         oneOf: ['teasr-app'],
         //     },
         // },
     });
@@ -46,7 +46,7 @@ const ProfileFeed = () => {
                     <div key={index} className="bg-black border border-white rounded-xl px-6 py-4 mb-4 shadow-md">
                         {
                             pub.metadata && 
-                            <div className='space-y-4'>
+                            <div className='space-y-4 mb-4'>
                                 <div className="flex items-center w-auto">
                                     <Image
                                         width="200"
@@ -67,9 +67,9 @@ const ProfileFeed = () => {
                                     </div>
                             </div>
                         }
-                        {/* {
-                            pub.metadata.mainContentFocus === "VIDEO" && <Player title={pub.metadata.content} playbackId={pub.metadata.description.replace('videoid_', '')} />
-                        } */}
+                        {
+                            pub.metadata.mainContentFocus === "TEXT_ONLY" && <Player  playbackId={pub.metadata.description.replace('videoid_', '')} />
+                        }
                         {
                             pub.metadata?.media[0]?.original && ['image/jpeg', 'image/png'].includes(pub.metadata?.media[0]?.original.mimeType) && (
                                 <Image

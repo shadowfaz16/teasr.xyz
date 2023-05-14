@@ -27,7 +27,7 @@ const NewTeasr = () => {
     const [description, setDescription] = useState("");
     const [collectionType, setCollectionType] = useState("");
     const [category, setCategory] = useState("");
-    const [sensitiveInfo, setSensitiveInfo] = useState("");
+
     const [video, setVideo] = useState<File | undefined>();
 
     const { data: user, loading } = useActiveProfile();
@@ -93,7 +93,6 @@ const NewTeasr = () => {
         setDescription("");
         setCollectionType("");
         setCategory("");
-        setSensitiveInfo("");
     }
 
 
@@ -130,50 +129,15 @@ const NewTeasr = () => {
                             />
                         </div>
                         <div className="mb-4">
-                            <button className="bg-blue-5-lg00 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded bg-gray-900 focus:outline-none focus:shadow-outline">
-                                Collection Type
+                            <button className="bg-blue-5-lg00 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg bg-gray-900 focus:outline-none focus:shadow-outline">
+                                Collection Type: <span className='text-xs'>FREE (for now)</span>
                             </button>
                         </div>
-                        <div className="mb-4">
-                            <label className="block text-gray-400 text-sm font-bold mb-2" htmlFor="category">
-                                Category
-                            </label>
-                            <select
-                                className="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-400 leading-tight bg-gray-900 focus:outline-none focus:shadow-outline"
-                                id="category"
-                                value={category}
-                                onChange={(e) => setCategory(e.target.value)}
-                            >
-                                {/* Add your categories here */}
-                                <option value="">Select a Category</option>
-                            </select>
-                        </div>
-                        <fieldset className="mb-4">
-                            <div>Contains Sensitive Information?</div>
-                            <div>
-                                <label>
-                                    <input
-                                        type="radio"
-                                        name="sensitiveInfo"
-                                        value="yes"
-                                        checked={sensitiveInfo === "yes"}
-                                        onChange={() => setSensitiveInfo("yes")}
-                                    />
-                                    Yes
-                                </label>
-                                <label>
-                                    <input
-                                        type="radio"
-                                        name="sensitiveInfo"
-                                        value="no"
-                                        checked={sensitiveInfo === "no"}
-                                        onChange={() => setSensitiveInfo("no")}
-                                    />
-                                    No
-                                </label>
-                            </div>
-                        </fieldset>
                     </form>
+                        {
+                            asset &&
+                            <Compose publisher={user} asset={asset?.[0].playbackId} title={title} description={description} />
+                        }
                 </div>
                 <div className="w-full md:w-1/2 p-4">
                     {!asset && (
@@ -198,6 +162,7 @@ const NewTeasr = () => {
                         )}
                         {video ? <p>{video.name}</p> : <p>Select a video file to upload.</p>}
                         <p>{asset?.[0].playbackId}</p>
+                        <p>{asset?.[0].playbackUrl}</p>
                         <p>{asset?.[0].storage?.ipfs?.cid}</p>
                         {progressFormatted && <p>{progressFormatted}</p>}
                         <div className='flex items-center space-x-2 mt-2'>
@@ -217,14 +182,13 @@ const NewTeasr = () => {
                             )}
                         </div>
                     </div>
-                    <Compose publisher={user} />
                 </div>
             </div>
         </div>
     );
 };
 
-function Compose({ publisher }) {
+function Compose({ publisher, asset, title, description },) {
     async function upload(postData: any) {
         const added = await client.add(JSON.stringify(postData))
         const uri = `ipfs://${added.path}`
@@ -236,26 +200,29 @@ function Compose({ publisher }) {
 
     const onSubmit = async () => {
         await create({
-            content: "My first video",
+            content: `${title}`,
             contentFocus: ContentFocus.TEXT,
             locale: 'en',
             collect: {
                 type: CollectPolicyType.FREE,
                 followersOnly: false,
                 metadata: {
-                    name: "livepeer-id",
-                    description: "videoid_559dz7d9mjq27hwr",
+                    name: description,
+                    description: asset,
                     attributes: [],
                 }
             }
         });
+
     };
     if (wallet) {
         console.log(wallet);
         return (
             <div>
                 <p>You are logged-in with {wallet.address}</p>
-                <button onClick={onSubmit}>save</button>
+                <button
+                    className='bg-gradient-to-r from-teal-400 to-magenta-500 text-white font-bold py-2 px-5 rounded mt-2'
+                 onClick={onSubmit}>Post now</button>
             </div>
         );
     }
